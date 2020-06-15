@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -28,5 +29,9 @@ public class ProductStockAndPriceService {
 
     public List<ProductStockAndPrice> findAllProductStockAndPrices() {
         return productStockAndPriceRepository.findAll();
+    }
+
+    public Optional<ProductStockAndPrice> findByCode(final String productCode) {
+        return productStockAndPriceRepository.findByProductCode(productCode);
     }
 }

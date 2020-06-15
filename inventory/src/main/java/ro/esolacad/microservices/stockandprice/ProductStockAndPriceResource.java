@@ -1,10 +1,13 @@
 package ro.esolacad.microservices.stockandprice;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,5 +21,16 @@ public class ProductStockAndPriceResource {
     @GetMapping
     public List<ProductStockAndPrice> findAllProductStockAndPrices() {
         return productStockAndPriceService.findAllProductStockAndPrices();
+    }
+
+    @GetMapping(value = "/{productCode}")
+    public ResponseEntity<ProductStockAndPrice> findByCode(@PathVariable("productCode") final String productCode) {
+        Optional<ProductStockAndPrice> byCode = productStockAndPriceService.findByCode(productCode);
+
+        if(byCode.isPresent()) {
+            return ResponseEntity.ok(byCode.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
