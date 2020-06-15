@@ -34,4 +34,13 @@ public class ProductStockAndPriceService {
     public Optional<ProductStockAndPrice> findByCode(final String productCode) {
         return productStockAndPriceRepository.findByProductCode(productCode);
     }
+
+    public void changeStock(StockChangeModel stockChangeModel) {
+        Optional<ProductStockAndPrice> byProductCode = productStockAndPriceRepository.findByProductCode(stockChangeModel.getProductCode());
+
+        byProductCode.ifPresent(productStockAndPrice -> {
+            productStockAndPrice.setStock(productStockAndPrice.getStock() + stockChangeModel.getQuantityToChange());
+            productStockAndPriceRepository.save(productStockAndPrice);
+        });
+    }
 }
