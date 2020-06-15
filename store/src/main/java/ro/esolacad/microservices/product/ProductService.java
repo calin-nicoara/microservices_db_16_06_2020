@@ -2,7 +2,9 @@ package ro.esolacad.microservices.product;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -20,6 +22,13 @@ public class ProductService {
     public Optional<ProductWithStockAndPriceModel> findByProductCode(final String code) {
         return productRepository.findByCode(code)
                 .map(product -> getProductWithStockAndPriceModel(product));
+    }
+
+    public List<ProductWithStockAndPriceModel> findAllProducts() {
+        return productRepository.findAll()
+                .stream()
+                .map(product ->  getProductWithStockAndPriceModel(product))
+                .collect(Collectors.toList());
     }
 
     private ProductWithStockAndPriceModel getProductWithStockAndPriceModel(final Product product) {
