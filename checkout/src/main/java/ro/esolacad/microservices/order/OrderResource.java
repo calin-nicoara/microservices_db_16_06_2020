@@ -16,6 +16,11 @@ public class OrderResource {
 
     @PostMapping
     public void createOrder(@RequestBody OrderModel orderModel) {
-        orderService.createOrder(orderModel);
+        orderService.createOrderWithChoreography(orderModel);
+    }
+
+    @PostMapping("/orchestrateCreation")
+    public void createOrderWithOrchestration(@RequestBody OrderModel orderModel) {
+        orderService.createOrderWithOrchestration(orderModel);
     }
 }

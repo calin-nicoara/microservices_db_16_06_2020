@@ -18,3 +18,7 @@ spring:
       bindings:
         orderChannel:
           destination: ORDER_TOPIC
+        paymentChannel:
+          destination: PAYMENT_TOPIC
+        approvePaymentForOrder:
+          destination: ORDER_PAYMENT_TOPIC

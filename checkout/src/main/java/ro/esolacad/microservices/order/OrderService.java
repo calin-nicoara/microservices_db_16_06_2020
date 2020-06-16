@@ -2,11 +2,13 @@ package ro.esolacad.microservices.order;
 
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import ro.esolacad.microservices.messaging.OrderMessagingGateway;
+import ro.esolacad.microservices.order.saga.OrderPaymentApprovalModel;
 
 @Service
 @RequiredArgsConstructor
@@ -15,8 +17,40 @@ public class OrderService {
     private final ShopOrderRepository shopOrderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMessagingGateway orderMessagingGateway;
+    private final OrderSagaRepository orderSagaRepository;
 
-    public void createOrder(OrderModel orderModel) {
+    public void createOrderWithChoreography(OrderModel orderModel) {
+        saveOrder(orderModel);
+        orderMessagingGateway.sendOrder(orderModel);
+    }
+
+    public void createOrderWithOrchestration(OrderModel orderModel) {
+        ShopOrder shopOrder = saveOrder(orderModel);
+
+        OrderSaga orderSaga = OrderSaga.builder()
+                .shopOrder(shopOrder)
+                .step(OrderSaga.Step.APPROVE_PAYMENT)
+                .build();
+
+        orderSagaRepository.save(orderSaga);
+
+//        orderMessagingGateway.sendOrder(orderModel);
+        BigDecimal sumOfOrderItems = orderModel.getOrderItems()
+                .stream()
+                .map(orderItemModel -> orderItemModel.getTotalLineValue())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        OrderPaymentApprovalModel paymentApprovalModel = OrderPaymentApprovalModel.builder()
+                .orderId(orderModel.getId())
+                .clientCode(orderModel.getClientCode())
+                .totalOrderValue(sumOfOrderItems)
+                .build();
+
+
+        orderMessagingGateway.sendApprovePaymentForOrder(paymentApprovalModel);
+    }
+
+    private ShopOrder saveOrder(final OrderModel orderModel) {
         ShopOrder shopOrder = ShopOrder.builder()
                 .clientCode(orderModel.getClientCode())
                 .state(ShopOrder.State.PENDING)
@@ -42,6 +76,8 @@ public class OrderService {
         System.out.println(shopOrder);
 
         orderModel.setId(shopOrder.getId());
-        orderMessagingGateway.sendOrder(orderModel);
+        orderModel.setState(shopOrder.getState());
+
+        return shopOrder;
     }
 }
