@@ -8,12 +8,16 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.net.ConnectException;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ro.esolacad.microservices.product.ProductWithStockAndPriceModel;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class InventoryClient {
+
+    private final InventoryFeignClient inventoryFeignClient;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -39,5 +43,9 @@ public class InventoryClient {
                 .price(BigDecimal.ZERO)
                 .stock(0)
                 .build();
+    }
+
+    public StockAndPriceModel findStockAndPriceByCodeUsingFeign(String productCode) {
+        return inventoryFeignClient.findStockAndPriceByCode(productCode).getBody();
     }
 }

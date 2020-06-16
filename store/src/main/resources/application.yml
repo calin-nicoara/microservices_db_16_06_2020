@@ -1,0 +1,12 @@
+server.port: 8081
+spring:
+  application:
+    name: store-service
+feign:
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+  hystrix:
+    enabled: true

@@ -32,7 +32,7 @@ public class ProductService {
     }
 
     private ProductWithStockAndPriceModel getProductWithStockAndPriceModel(final Product product) {
-        StockAndPriceModel stockAndPriceByCode = inventoryClient.findStockAndPriceByCode(product.getCode());
+        StockAndPriceModel stockAndPriceByCode = inventoryClient.findStockAndPriceByCodeUsingFeign(product.getCode());
 
         return ProductWithStockAndPriceModel.builder()
                 .id(product.getId())
