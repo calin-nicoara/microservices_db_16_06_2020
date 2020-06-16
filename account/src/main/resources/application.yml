@@ -1,6 +1,7 @@
+
 spring:
   application:
-    name: inventory-service
+    name: account-service
   cloud:
     stream:
       kafka:
@@ -15,7 +16,9 @@ spring:
                 linger.ms: 50
                 key.serializer: org.apache.kafka.common.serialization.StringSerializer
       default:
-        group: INVENTORY_SERVICE_GROUP
+        group: ACCOUNT_SERVICE_GROUP
       bindings:
         testChannel:
           destination: TEST_TOPIC
+server:
+  port: 8084
