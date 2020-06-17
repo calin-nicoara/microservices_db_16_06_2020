@@ -11,8 +11,9 @@ import ro.esolacad.microservices.order.saga.OrderPaymentApprovalModel;
 @MessagingGateway
 public interface OrderMessagingGateway {
 
-    @Gateway(requestChannel = "orderChannel",
-        headers = {@GatewayHeader(name = KafkaHeaders.MESSAGE_KEY, expression = "#args[0].id")})
+    @Gateway(requestChannel = "orderChannel"
+//        headers = {@GatewayHeader(name = KafkaHeaders.MESSAGE_KEY, expression = "#args[0].id")}
+        )
     void sendOrder(OrderModel orderModel);
 
     @Gateway(requestChannel = "approvePaymentForOrder")

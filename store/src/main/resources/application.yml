@@ -26,3 +26,6 @@ feign:
       enabled: true
   hystrix:
     enabled: true
+security:
+  jwt:
+    public-key: classpath:public.txt

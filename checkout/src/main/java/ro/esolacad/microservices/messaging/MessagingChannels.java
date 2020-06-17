@@ -16,4 +16,10 @@ public interface MessagingChannels {
 
     @Input
     SubscribableChannel paymentChannel();
+
+    @Output
+    MessageChannel sendOrderEmailOut();
+
+    @Input
+    SubscribableChannel sendOrderEmailIn();
 }
