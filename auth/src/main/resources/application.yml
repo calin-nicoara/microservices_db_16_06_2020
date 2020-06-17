@@ -1,0 +1,7 @@
+server.port: 9000
+
+security:
+  jwt:
+    key-store: classpath:jwtv2.jks
+    key-store-password: mySecret
+    key-pair-alias: alias-jwt
