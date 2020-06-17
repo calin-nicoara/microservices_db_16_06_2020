@@ -1,0 +1,28 @@
+server.port: 8081
+spring:
+  application:
+    name: store-service
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${KAFKA_BROKEN:localhost}
+          transaction:
+            producer:
+              configuration:
+                retries: 3
+                max.in.flight.requests.per.connection: 1
+                acks: 'all'
+                linger.ms: 50
+                key.serializer: org.apache.kafka.common.serialization.StringSerializer
+      bindings:
+        testChannel:
+          destination: TEST_TOPIC
+feign:
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+  hystrix:
+    enabled: true

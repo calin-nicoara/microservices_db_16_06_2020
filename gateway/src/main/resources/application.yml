@@ -1,14 +1,20 @@
 server.port: 8999
 spring:
   cloud:
+    discovery:
+      enabled: true
     gateway:
       globalcors:
         cors-configurations:
           '[/**]':
             allowedOrigins: http://localhost:4200
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
       routes:
         - id: store-service
-          uri: http://localhost:8081
+          uri: lb://store-service
           predicates:
             - Path=/store/**
 #            - After
@@ -18,8 +24,10 @@ spring:
             - StripPrefix=1
             - AddResponseHeader=X-CUSTOM-RESPONSE,HELLO
         - id: checkout-service
-          uri: http://localhost:8082
+          uri: lb://checkout-service
           predicates:
             - Path=/checkout/**
           filters:
             - StripPrefix=1
+  application:
+    name: gateway-service
