@@ -8,18 +8,12 @@ import org.springframework.messaging.SubscribableChannel;
 
 public interface MessagingChannels {
 
-    @Output
-    MessageChannel orderChannel();
-
-    @Output
-    MessageChannel approvePaymentForOrder();
+    @Input
+    SubscribableChannel orderChannel();
 
     @Input
-    SubscribableChannel paymentChannel();
+    SubscribableChannel approvePaymentForOrder();
 
     @Output
-    MessageChannel sendOrderEmailOut();
-
-    @Input
-    SubscribableChannel sendOrderEmailIn();
+    MessageChannel paymentChannel();
 }

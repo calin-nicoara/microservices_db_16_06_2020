@@ -7,21 +7,40 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ro.esolacad.microservices.messaging.OrderMessagingGateway;
 import ro.esolacad.microservices.order.saga.OrderPaymentApprovalModel;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final ShopOrderRepository shopOrderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMessagingGateway orderMessagingGateway;
     private final OrderSagaRepository orderSagaRepository;
+    private final EmailService emailService;
+
+    public void createOrderAndSendEmailSync(OrderModel orderModel) {
+        saveOrder(orderModel);
+        boolean emailSent = emailService.sendEmail(orderModel);
+
+        log.info("Was the email send? : " + emailSent);
+    }
+
+    public void createOrderAndSendEmailAsync(OrderModel orderModel) {
+        saveOrder(orderModel);
+        emailService.sendEmail(orderModel);
+    }
 
     public void createOrderWithChoreography(OrderModel orderModel) {
         saveOrder(orderModel);
         orderMessagingGateway.sendOrder(orderModel);
+
+        boolean emailSent = emailService.sendEmail(orderModel);
+
+        log.info("Was the email send? : " + emailSent);
     }
 
     public void createOrderWithOrchestration(OrderModel orderModel) {

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderConsumer {
 
-    @StreamListener("orderChannel")
+//    @StreamListener("orderChannel")
     public void consumerOrder() {
 
         // Listening to PAYMENT_APPORVED orders
