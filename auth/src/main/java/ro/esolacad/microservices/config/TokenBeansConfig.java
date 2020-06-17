@@ -2,12 +2,14 @@ package ro.esolacad.microservices.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import java.security.KeyPair;
@@ -25,9 +27,13 @@ public class TokenBeansConfig {
     public JwtAccessTokenConverter  jwtAccessTokenConverter() {
         CustomTokenEnhancer customTokenEnhancer = new CustomTokenEnhancer();
 
-        Resource keyStore = securityProperties.getJtw().getKeyStore();
-        char[] passwordAsArray = securityProperties.getJtw().getKeyStorePassword().toCharArray();
-        String keyPairAlias = securityProperties.getJtw().getKeyPairAlias();
+//        Resource keyStore = securityProperties.getJtw().getKeyStore();
+//        char[] passwordAsArray = securityProperties.getJtw().getKeyStorePassword().toCharArray();
+//        String keyPairAlias = securityProperties.getJtw().getKeyPairAlias();
+
+        Resource keyStore = new DefaultResourceLoader().getResource("classpath:jwtv2.jks");
+        char[] passwordAsArray = "mySecret".toCharArray();
+        String keyPairAlias = "alias-jwt";
 
         KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(keyStore, passwordAsArray);
 
@@ -35,6 +41,11 @@ public class TokenBeansConfig {
 
         customTokenEnhancer.setKeyPair(keyPair);
         return customTokenEnhancer;
+    }
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
     @Bean
