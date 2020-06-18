@@ -1,0 +1,55 @@
+Necessary plugins to compile the groovy tests
+```
+<plugin>
+    <groupId>org.codehaus.gmavenplus</groupId>
+    <artifactId>gmavenplus-plugin</artifactId>
+    <version>1.5</version>
+    <executions>
+        <execution>
+            <phase>generate-test-sources</phase>
+            <goals>
+                <goal>testCompile</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>build-helper-maven-plugin</artifactId>
+    <executions>
+        <execution>
+            <id>add-test-source</id>
+            <phase>process-test-sources</phase>
+            <goals>
+                <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+                <sources>
+                    <source>src/test/groovy</source>
+                </sources>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
+
+Dependencies necessary for spock, groovy and additional stream test support
+```
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-stream-test-support</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.spockframework</groupId>
+    <artifactId>spock-spring</artifactId>
+    <version>1.3-groovy-2.5</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>cglib</groupId>
+    <artifactId>cglib-nodep</artifactId>
+    <version>3.3.0</version>
+    <scope>test</scope>
+</dependency>
+```
