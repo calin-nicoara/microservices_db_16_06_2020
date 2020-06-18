@@ -25,4 +25,5 @@ public class ProductStockAndPrice {
     private String productCode;
     private BigDecimal price;
     private Integer stock;
+    private Integer reservedStock;
 }

@@ -1,6 +1,6 @@
 package ro.esolacad.microservices.stockandprice;
 
-import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StockChangeModel {
-
+public class ProductStockAndPriceModel {
+    private Long id;
     private String productCode;
-    private Integer quantityToChange;
+    private BigDecimal price;
+    private Integer stock;
 }

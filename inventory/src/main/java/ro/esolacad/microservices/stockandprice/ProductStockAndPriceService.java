@@ -18,16 +18,16 @@ public class ProductStockAndPriceService {
 
     private final ProductStockAndPriceRepository productStockAndPriceRepository;
 
-    @PostConstruct
-    public void init() {
-        productStockAndPriceRepository.save(
-                ProductStockAndPrice.builder()
-                        .price(BigDecimal.valueOf(2.5))
-                        .stock(10)
-                        .productCode("PR_1")
-                        .build()
-        );
-    }
+//    @PostConstruct
+//    public void init() {
+//        productStockAndPriceRepository.save(
+//                ProductStockAndPrice.builder()
+//                        .price(BigDecimal.valueOf(2.5))
+//                        .stock(10)
+//                        .productCode("PR_1")
+//                        .build()
+//        );
+//    }
 
     public List<ProductStockAndPrice> findAllProductStockAndPrices() {
         return productStockAndPriceRepository.findAll();
@@ -35,6 +35,18 @@ public class ProductStockAndPriceService {
 
     public Optional<ProductStockAndPrice> findByCode(final String productCode) {
         return productStockAndPriceRepository.findByProductCode(productCode);
+    }
+
+    public Optional<ProductStockAndPriceModel> findModelByCode(final String productCode) {
+        return productStockAndPriceRepository.findByProductCode(productCode)
+                .map(productStockAndPrice ->
+                    ProductStockAndPriceModel.builder()
+                            .id(productStockAndPrice.getId())
+                            .price(productStockAndPrice.getPrice())
+                            .productCode(productStockAndPrice.getProductCode())
+                            .stock(productStockAndPrice.getStock())
+                            .build()
+                );
     }
 
     public void changeStock(StockChangeModel stockChangeModel) {

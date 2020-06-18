@@ -1,6 +1,7 @@
 package ro.esolacad.microservices.externalclients;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import java.awt.*;
 //        fallback = InventoryFeignFallback.class,
         fallbackFactory = InventoryFeignFallbackFactory.class
 )
+@Profile("!test")
 public interface InventoryFeignClient {
 
     @RequestMapping(value = "/stock-and-price/{productCode}", method = RequestMethod.GET,

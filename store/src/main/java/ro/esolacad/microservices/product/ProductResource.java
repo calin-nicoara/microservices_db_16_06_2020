@@ -32,18 +32,17 @@ public class ProductResource {
 //    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_GUEST')")
 //    @PreAuthorize("#code == 'PR_1'")
     public ResponseEntity<ProductWithStockAndPriceModel> findByProductCode(
-            @PathVariable("productCode") String code,
-            @RequestHeader("Authorization") String token
+            @PathVariable("productCode") String code
     ) {
 
-        log.info(token);
+//        log.info(token);
         Optional<ProductWithStockAndPriceModel> byProductCode = productService.findByProductCode(code);
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
-
-        OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(details.getTokenValue());
-        log.info(oAuth2AccessToken.getAdditionalInformation().toString());
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
+//
+//        OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(details.getTokenValue());
+//        log.info(oAuth2AccessToken.getAdditionalInformation().toString());
 
 //        testMessagingGateway.sendMessage("TEST_MESSAGE");
 

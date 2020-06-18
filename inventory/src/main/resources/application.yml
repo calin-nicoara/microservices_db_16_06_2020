@@ -1,4 +1,8 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ms_course_inventory
+    username: postgres
+    password: postgres
   application:
     name: inventory-service
   cloud:
