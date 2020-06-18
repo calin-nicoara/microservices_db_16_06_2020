@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = ProductStockAndPriceResource.class)
-class ProductStockAndPriceResourceTest {
+class ProductStockAndPriceResourceTestIT {
 
     @MockBean
     private ProductStockAndPriceService productStockAndPriceService;

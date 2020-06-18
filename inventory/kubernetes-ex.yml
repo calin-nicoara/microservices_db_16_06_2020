@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-inventory-deployment
+  labels:
+    app: ms-inventory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-inventory
+  template:
+    metadata:
+      labels:
+        app: ms-inventory
+    spec:
+      containers:
+        - name: ms-inventory
+          image: docker.io/calin2811/ms-inventory:0.1
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 90
+            timeoutSeconds: 5
+            failureThreshold: 10
+#          env:
+          #            - name: ENV_VARIABLE_FROM_SECRET
+          #              valueFrom:
+          #                secretKeyRef:
+          #                  name: secret-name
+          #                  key: key-of-property
+          envFrom:
+            - configMapRef:
+                name: ms-inventory-envars
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "600Mi"
+            limits:
+              memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-inventory
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: ms-inventory
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-inventory-envars
+  namespace: default
+data:
+  JAVA_OPTS: "-XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:+UseStringDeduplication -Dspring.profiles.active=cloud"

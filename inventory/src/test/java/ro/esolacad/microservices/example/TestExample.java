@@ -11,6 +11,6 @@ public class TestExample {
 
         int add = calculator.add(2, 3);
 
-        Assertions.assertEquals(6, add);
+        Assertions.assertEquals(5, add);
     }
 }
